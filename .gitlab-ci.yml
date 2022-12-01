@@ -8,4 +8,4 @@ test:
 
 build:
   script:
-    - npm run build
+    - npm  build
