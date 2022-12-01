@@ -21,15 +21,6 @@ function App() {
     }
   })
 
-  const DecrementSecondsRemaining = () => {
-    console.log("DecrementSecondsRemaining")
-    if (secondsRemaining == 0) {
-      console.log(secondsRemaining)
-      setGameOver(true)
-    }
-    setSecondsRemaining(secondsRemaining - 1)
-  }
-
   const GetQuestionNumbers = () => {
     // Get two random numbers between 1 and 10
     let first = Math.floor(Math.random() * 10)
