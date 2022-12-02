@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import AnswerButton from "./components/AnswerButton"
+import StartButton from "./components/StartButton";
+import Game from "./pages/Game";
+import GameOver from "./pages/GameOver";
+import Welcome from "./pages/Welcome";
 
 function App() {
 
@@ -86,42 +90,19 @@ function App() {
     GetQuestionNumbers()
   }
 
-
-
   return (
-
     <div className="flex flex-col items-center bg-gray-700 h-screen">
       {gameOver ? firstTime ? (
-        <div className="flex flex-col space-y-8">
-          <h1 className="self-center text-4xl pt-8 text-gray-400">guess the number</h1>
-          <button className="self-center px-8 py-2 bg-gray-200 rounded-lg bg-primary text-gray-900 text-2xl text-center font-playfair drop-shadow-md hover:drop-shadow-2xl hover:bg-gray-100 hover:text-primary  transition ease-in-out delay-75 duration-200" onClick={() => StartGame()}>Start</button>
-        </div>) : (
-        <div className="flex flex-col space-y-8">
-          <h2 className="self-center text-4xl pt-8 text-gray-400">score <b className="text-red-700">{score}</b></h2>
-          <button className="self-center px-8 py-2 bg-gray-200 rounded-lg bg-primary text-gray-900 text-xl text-center font-playfair drop-shadow-md hover:drop-shadow-2xl hover:bg-gray-100 hover:text-primary  transition ease-in-out delay-75 duration-200" onClick={() => StartGame()}>Play Again</button>
-        </div>
+        <Welcome startGame={StartGame} />
+        ) : (
+          <GameOver startGame={StartGame} score={score}/>
       ) : (
-        <div className="flex flex-col space-y-8">
-          <h1 className="self-center text-4xl pt-8 text-gray-400">guess the number</h1>
-          <div className="flex justify-between">
-            <div className="flex flex-col">
-              <p className="text-sm text-gray-400 pl-2 self-center">time</p>
-              <p className="text-lg text-yellow-300 pl-2 self-center">{secondsRemaining}</p>
-            </div>
-            <div className="flex flex-col">
-              <p className="text-sm text-gray-400 pr-2 self-center">score</p>
-              <p className="text-lg text-yellow-300 pr-2 self-center">{score}</p>
-            </div>
-          </div>
-
-          <p className="self-center text-8xl text-gray-50">{firstNumber} + {secondNumber}</p>
-
-          <ul className='flex flex-row flex-wrap pt-8 justify-center'>
-            {answerOptions.map((answer, index) => {
-              return <li className="p-4" key={index}><AnswerButton number={answer} answerScore={AnswerQuestion} /></li>
-            })}
-          </ul>
-        </div>
+        <Game answerOptions={answerOptions} 
+          answerQuestion={AnswerQuestion} 
+          firstNumber={firstNumber} 
+          secondNumber={secondNumber} 
+          score={score} 
+          secondsRemaining={secondsRemaining}/>
       )}
     </div>
 
