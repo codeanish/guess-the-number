@@ -21,3 +21,5 @@ deploy to s3:
     - aws s3 rm s3://$S3_BUCKET --recursive
     - aws s3 cp dist s3://$S3_BUCKET --recursive
     - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths '/*'
+  environment:
+    name: production
