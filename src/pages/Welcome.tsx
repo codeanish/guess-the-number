@@ -7,8 +7,7 @@ type Props = {
 
 const Welcome = (props: Props) => {
   return (
-    <div className="flex flex-col space-y-8">
-          <h1 className="self-center text-4xl pt-8 text-gray-400">guess the number</h1>
+    <div className="place-self-center content-center justify-center justify-items-center">
           <StartButton startGame={props.startGame} text="Start"/>
     </div>
   )

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AnswerButton from "./components/AnswerButton"
+import ConfiguratorBar from "./components/ConfiguratorBar";
 import StartButton from "./components/StartButton";
 import Game from "./pages/Game";
 import GameOver from "./pages/GameOver";
@@ -14,6 +15,7 @@ function App() {
   const [secondsRemaining, setSecondsRemaining] = useState(0)
   const [gameOver, setGameOver] = useState(true)
   const [firstTime, setFirstTime] = useState(true)
+  const [selectedTime, setSelectedTime] = useState(60);
 
   useEffect(() => {
     if (secondsRemaining > 0 && gameOver == false) {
@@ -85,13 +87,15 @@ function App() {
   const StartGame = () => {
     setGameOver(false)
     setFirstTime(false)
-    setSecondsRemaining(60)
+    setSecondsRemaining(selectedTime)
     setScore(0)
     GetQuestionNumbers()
   }
 
   return (
-    <div className="flex flex-col items-center bg-gray-700 h-screen">
+    <div className="flex flex-col items-center bg-neutral-700 h-screen space-y-8">
+      <h1 className="self-center text-4xl pt-8 text-neutral-400">guess the number</h1>
+      <ConfiguratorBar selectedTime={selectedTime} setSelectedTime={setSelectedTime}/>
       {gameOver ? firstTime ? (
         <Welcome startGame={StartGame} />
         ) : (
