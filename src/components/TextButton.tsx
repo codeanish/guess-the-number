@@ -3,16 +3,17 @@ import React from 'react'
 type Props = {
     isActive: boolean,
     text: string,
-    onClick: () => void
+    onClick: () => void,
+    enabled: boolean
 }
 
 const TextButton = (props: Props) => {
   return (
     <>
     {props.isActive ? 
-        <button className='text-yellow-500 hover:text-neutral-100 transition ease-in-out delay-75 duration-200' onClick={() => props.onClick()}>{props.text}</button>
+        <button disabled={!props.enabled} className={`text-yellow-500 ${props.enabled ? "md:hover:text-neutral-100 transition ease-in-out delay-75 duration-200": ""} `} onClick={() => props.onClick()}>{props.text}</button>
         :
-        <button className='text-neutral-500 hover:text-neutral-100 transition ease-in-out delay-75 duration-200' onClick={() => props.onClick()}>{props.text}</button>
+        <button disabled={!props.enabled} className={`text-neutral-500 ${props.enabled ? "md:hover:text-neutral-100 transition ease-in-out delay-75 duration-200": ""}`} onClick={() => props.onClick()}>{props.text}</button>
     }
     </>
   )

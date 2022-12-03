@@ -20,6 +20,8 @@ function App() {
   const [xActive, setXActive] = useState(false);
   const [divideActive, setDivideActive] = useState(false);
   const [operation, setOperation] = useState<Operation>(Operation.Add);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState(0);
 
   useEffect(() => {
     if (secondsRemaining > 0 && gameOver == false) {
@@ -103,10 +105,12 @@ function App() {
   }
 
   const IncrementScore = () => {
+    setCorrectAnswers(correctAnswers + 1)
     setScore(score + 1)
   }
 
   const DecrementScore = () => {
+    setIncorrectAnswers(incorrectAnswers + 1)
     setScore(score - 1)
   }
 
@@ -173,6 +177,13 @@ function App() {
     GetQuestionNumbers(operation)
   }
 
+  const CanStart = () : boolean => {
+    if(addActive || minusActive || xActive || divideActive){
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div className="flex flex-col items-center bg-neutral-700 h-screen space-y-8">
       <h1 className="self-center text-4xl pt-8 text-neutral-400">guess the number</h1>
@@ -183,9 +194,9 @@ function App() {
         divideActive={divideActive} toggleDivideActive={setDivideActive}
         gameActive={!gameOver}/>
       {gameOver ? firstTime ? (
-        <Welcome startGame={StartGame} />
+        <Welcome startGame={StartGame} canStart={CanStart} />
         ) : (
-          <GameOver startGame={StartGame} score={score}/>
+          <GameOver startGame={StartGame} canStart={CanStart} score={score} correctAnswers={correctAnswers} incorrectAnswers={incorrectAnswers}/>
       ) : (
         <Game answerOptions={answerOptions} 
           answerQuestion={AnswerQuestion} 
