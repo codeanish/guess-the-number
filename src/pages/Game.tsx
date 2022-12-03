@@ -1,5 +1,7 @@
 import React from 'react'
 import AnswerButton from '../components/AnswerButton'
+import {Plus, Minus, X, Divide} from 'react-feather';
+import Operation from '../types/Operation';
 
 type Props = {
     secondsRemaining: number,
@@ -7,10 +9,26 @@ type Props = {
     firstNumber: number,
     secondNumber: number,
     answerOptions: number[],
-    answerQuestion: (answer: number) => void
+    answerQuestion: (answer: number) => void,
+    operation: Operation
 }
 
+
 const Game = (props: Props) => {
+
+  const GetOperatorIcon = (operation: Operation) : JSX.Element =>  {
+    switch(operation){
+      case Operation.Add:
+        return <Plus/>
+      case Operation.Subtract:
+        return <Minus/>
+      case Operation.Multiply:
+        return <X/>
+      case Operation.Divide:
+        return <Divide/>
+    }
+  }
+
   return (
     <div className="flex flex-col space-y-8">
           <div className="flex justify-between">
@@ -23,8 +41,13 @@ const Game = (props: Props) => {
               <p className="text-lg text-yellow-300 pr-2 self-center">{props.score}</p>
             </div>
           </div>
-
-          <p className="self-center text-8xl text-neutral-50">{props.firstNumber} + {props.secondNumber}</p>
+          <div className="flex flex-row items-center self-center text-8xl text-neutral-50 space-x-4">
+            <div>{props.firstNumber}</div>
+            {
+              GetOperatorIcon(props.operation)
+            }
+            <div>{props.secondNumber}</div>
+          </div>
 
           <ul className='flex flex-row flex-wrap pt-8 justify-center'>
             {props.answerOptions.map((answer, index) => {

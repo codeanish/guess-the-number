@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import AnswerButton from "./components/AnswerButton"
 import ConfiguratorBar from "./components/ConfiguratorBar";
-import StartButton from "./components/StartButton";
 import Game from "./pages/Game";
 import GameOver from "./pages/GameOver";
 import Welcome from "./pages/Welcome";
+import Operation from "./types/Operation";
 
 function App() {
 
@@ -16,6 +15,11 @@ function App() {
   const [gameOver, setGameOver] = useState(true)
   const [firstTime, setFirstTime] = useState(true)
   const [selectedTime, setSelectedTime] = useState(60);
+  const [addActive, setAddActive] = useState(true);
+  const [minusActive, setMinusActive] = useState(false);
+  const [xActive, setXActive] = useState(false);
+  const [divideActive, setDivideActive] = useState(false);
+  const [operation, setOperation] = useState<Operation>(Operation.Add);
 
   useEffect(() => {
     if (secondsRemaining > 0 && gameOver == false) {
@@ -27,23 +31,62 @@ function App() {
     }
   })
 
-  const GetQuestionNumbers = () => {
+  const GetQuestionNumbers = (questionOperation: Operation) => {
     // Get two random numbers between 1 and 10
-    let first = Math.floor(Math.random() * 10)
-    let second = Math.floor(Math.random() * 10)
-    // Work out the answer
-    let answer = first + second
+    if(questionOperation === Operation.Add){
+      let first = Math.floor(Math.random() * 10)
+      let second = Math.floor(Math.random() * 10)
 
-    setFirstNumber(first)
-    setSecondNumber(second)
-    GetUniqueAnswerOptions(answer);
-    setAnswerOptions(GetUniqueAnswerOptions(answer))
+      // Work out the answer
+      let answer = first + second
+      setFirstNumber(first)
+      setSecondNumber(second)
+      GetUniqueAnswerOptions(answer);
+      setAnswerOptions(GetUniqueAnswerOptions(answer))
+    }
+    if(questionOperation === Operation.Subtract){
+      let first = Math.floor(Math.random() * 10)
+      let second = Math.floor(Math.random() * 10)
+      
+      // Work out the answer
+      let answer = first - second
+      setFirstNumber(first)
+      setSecondNumber(second)
+      GetUniqueAnswerOptions(answer);
+      setAnswerOptions(GetUniqueAnswerOptions(answer))
+    }
+    if(questionOperation === Operation.Multiply){
+      let first = Math.floor(Math.random() * 10)
+      let second = Math.floor(Math.random() * 10)
+      
+      // Work out the answer
+      let answer = first * second
+      setFirstNumber(first)
+      setSecondNumber(second)
+      GetUniqueAnswerOptions(answer);
+      setAnswerOptions(GetUniqueAnswerOptions(answer))
+    }
+    if(questionOperation === Operation.Divide){
+
+      // Want to see 12/4 = 3
+      // Using Math.floor + 1 here to ensure I get random numbers between 1-10
+      let answer = Math.floor(Math.random() * 10) + 1
+      let second = Math.floor(Math.random() * 10) + 1
+      let first = answer * second
+      
+      // Work out the answer
+      // let answer = first * second
+      setFirstNumber(first)
+      setSecondNumber(second)
+      GetUniqueAnswerOptions(answer);
+      setAnswerOptions(GetUniqueAnswerOptions(answer))
+    }
+
   }
 
   const GetUniqueAnswerOptions = (answer: number) => {
-    // let optionsArray = [...Array(Math.max(answer * 2 + 1, 10)).keys()]
     let optionsArray = Array.from({ length: Math.max(answer * 2, 10) }, (_, i) => i + 1)
-
+    console.log(optionsArray)
     // Find and remove the answer from the array
     let answerIndex = optionsArray.indexOf(answer)
     optionsArray.splice(answerIndex, 1)
@@ -69,8 +112,25 @@ function App() {
   }
 
   const IsAnswerCorrect = (answer: number): boolean => {
-    if (firstNumber + secondNumber == answer) {
-      return true;
+    if (operation === Operation.Add){
+      if (firstNumber + secondNumber == answer) {
+        return true;
+      }
+    }
+    if (operation === Operation.Subtract){
+      if (firstNumber - secondNumber == answer) {
+        return true;
+      }
+    }
+    if (operation === Operation.Multiply){
+      if (firstNumber * secondNumber == answer) {
+        return true;
+      }
+    }
+    if (operation === Operation.Divide){
+      if (firstNumber / secondNumber == answer) {
+        return true;
+      }
     }
     return false;
   }
@@ -81,7 +141,27 @@ function App() {
     } else {
       DecrementScore()
     }
-    GetQuestionNumbers()
+    let operation = GetRandomOperation()
+    setOperation(operation)
+    GetQuestionNumbers(operation)
+  }
+
+  const GetRandomOperation = () : Operation => {
+    let options = []
+    if (addActive){
+      options.push(Operation.Add)
+    }
+    if (minusActive){
+      options.push(Operation.Subtract)
+    }
+    if (xActive){
+      options.push(Operation.Multiply)
+    }
+    if (divideActive){
+      options.push(Operation.Divide)
+    }
+    const randomOperation = options[Math.floor(Math.random() * options.length)]
+    return randomOperation
   }
 
   const StartGame = () => {
@@ -89,13 +169,20 @@ function App() {
     setFirstTime(false)
     setSecondsRemaining(selectedTime)
     setScore(0)
-    GetQuestionNumbers()
+    let operation = GetRandomOperation()
+    setOperation(operation)
+    GetQuestionNumbers(operation)
   }
 
   return (
     <div className="flex flex-col items-center bg-neutral-700 h-screen space-y-8">
       <h1 className="self-center text-4xl pt-8 text-neutral-400">guess the number</h1>
-      <ConfiguratorBar selectedTime={selectedTime} setSelectedTime={setSelectedTime}/>
+      <ConfiguratorBar selectedTime={selectedTime} setSelectedTime={setSelectedTime} 
+        addActive={addActive} toggleAddActive={setAddActive} 
+        minusActive={minusActive} toggleMinusActive={setMinusActive} 
+        xActive={xActive} toggleXActive={setXActive} 
+        divideActive={divideActive} toggleDivideActive={setDivideActive}
+        gameActive={!gameOver}/>
       {gameOver ? firstTime ? (
         <Welcome startGame={StartGame} />
         ) : (
@@ -106,7 +193,8 @@ function App() {
           firstNumber={firstNumber} 
           secondNumber={secondNumber} 
           score={score} 
-          secondsRemaining={secondsRemaining}/>
+          secondsRemaining={secondsRemaining}
+          operation={operation}/>
       )}
     </div>
 
