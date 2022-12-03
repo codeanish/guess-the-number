@@ -86,7 +86,6 @@ function App() {
 
   const GetUniqueAnswerOptions = (answer: number) => {
     let optionsArray = Array.from({ length: Math.max(answer * 2, 10) }, (_, i) => i + 1)
-    console.log(optionsArray)
     // Find and remove the answer from the array
     let answerIndex = optionsArray.indexOf(answer)
     optionsArray.splice(answerIndex, 1)
