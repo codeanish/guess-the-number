@@ -172,6 +172,8 @@ function App() {
     setFirstTime(false)
     setSecondsRemaining(selectedTime)
     setScore(0)
+    setCorrectAnswers(0)
+    setIncorrectAnswers(0)
     let operation = GetRandomOperation()
     setOperation(operation)
     GetQuestionNumbers(operation)
@@ -186,7 +188,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center bg-neutral-700 h-screen space-y-8">
-      <h1 className="self-center text-4xl pt-8 text-neutral-400">guess the number</h1>
+      <h1 className="self-center text-4xl pt-8 text-neutral-200">fastnumbers</h1>
       <ConfiguratorBar selectedTime={selectedTime} setSelectedTime={setSelectedTime} 
         addActive={addActive} toggleAddActive={setAddActive} 
         minusActive={minusActive} toggleMinusActive={setMinusActive} 
